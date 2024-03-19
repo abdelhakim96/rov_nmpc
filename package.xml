@@ -1,0 +1,18 @@
+
+<package format="3">
+  <name>mpc_acado</name>
+  <version>0.0.0</version>
+  <description>MPC for a drone model implemented in ACADO </description>
+  <maintainer email="aha@eiva.com">Hakim</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+
+  <depend>px4_msgs</depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
