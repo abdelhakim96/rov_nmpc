@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "unordered_map": "cpp",
+        "*.ipp": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "iterator": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "tuple": "cpp",
+        "random": "cpp"
+    }
+}

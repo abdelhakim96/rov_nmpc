@@ -44,8 +44,8 @@ NMPC::NMPC(struct nmpc_struct_& _nmpc_inp_struct)
     nmpc_struct.W = &nmpcVariables.W[0];
     nmpc_struct.WN = &nmpcVariables.WN[0];
 
-    nmpc_cmd_struct.control_attitude_vec.resize(3, 0.0);
-    nmpc_cmd_struct.control_thrust_vec.resize(3, 0.0);
+    nmpc_cmd_struct.force.resize(3, 0.0);
+    nmpc_cmd_struct.torque.resize(3, 0.0);
     //nmpc_cmd_struct.control_thrust_vec = {nmpc_inp_struct.U_ref(3),
     //                                      ((1 - 0) / (nmpc_inp_struct.max_Fz_scale - nmpc_inp_struct.min_Fz_scale)) *
     //                                          (nmpc_inp_struct.U_ref(3) - nmpc_inp_struct.min_Fz_scale)};
@@ -226,13 +226,13 @@ void NMPC::nmpc_core(struct nmpc_struct_& _nmpc_inp_struct,
       //                                  ((1 - 0) / (nmpc_inp_struct.max_Fz_scale - nmpc_inp_struct.min_Fz_scale)) *
       //                                      (acadostruct.u[0] - nmpc_inp_struct.min_Fz_scale)};
 
-    commandstruct.control_thrust_vec[0] = 0.0;
-    commandstruct.control_thrust_vec[1] = 0.0;
-    commandstruct.control_thrust_vec[2] = acadostruct.u[0];
+    commandstruct.force[0] = acadostruct.u[0];
+    commandstruct.force[1] = acadostruct.u[1];
+    commandstruct.force[2] = acadostruct.u[2];
 
-    commandstruct.control_attitude_vec[0] = acadostruct.u[1];
-    commandstruct.control_attitude_vec[1] = acadostruct.u[2];
-    commandstruct.control_attitude_vec[2] = acadostruct.u[3];
+    commandstruct.torque[0] = acadostruct.u[3];
+    commandstruct.torque[1] = acadostruct.u[4];
+    commandstruct.torque[2] = acadostruct.u[5];
 
     commandstruct.kkt_tol = acadostruct.getKKT();
     commandstruct.obj_val = acadostruct.getObjective();

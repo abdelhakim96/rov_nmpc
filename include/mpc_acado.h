@@ -36,6 +36,9 @@ struct online_data_struct_
     std::vector<double> distFx;
     std::vector<double> distFy;
    std::vector<double> distFz;
+    std::vector<double> distMx;
+    std::vector<double> distMy;
+   std::vector<double> distMz;
 };
 
 class NMPC
@@ -81,8 +84,8 @@ public:
 
     struct command_struct
     {
-        std::vector<double> control_attitude_vec;
-        std::vector<double> control_thrust_vec;
+        std::vector<double> force;
+        std::vector<double> torque;
         double exe_time;
         double kkt_tol;
         double obj_val;
