@@ -40,7 +40,7 @@ int nmpc_solve( void )
 {
 	nmpc_nWSR = QPOASES_NWSRMAX;
 
-	QProblemB qp( 129 );
+	QProblemB qp( 612 );
 	
 	returnValue retVal = qp.init(nmpcWorkspace.H, nmpcWorkspace.g, nmpcWorkspace.lb, nmpcWorkspace.ub, nmpc_nWSR, nmpcWorkspace.y);
 

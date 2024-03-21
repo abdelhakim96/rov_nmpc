@@ -1,8 +1,8 @@
 
 <package format="3">
-  <name>mpc_acado</name>
+  <name>rov_mpc</name>
   <version>0.0.0</version>
-  <description>MPC for a drone model implemented in ACADO </description>
+  <description>MPC for a rov implemented in ACADO </description>
   <maintainer email="aha@eiva.com">Hakim</maintainer>
   <license>TODO: License declaration</license>
 

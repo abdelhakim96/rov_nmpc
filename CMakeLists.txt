@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(mpc_acado)
+project(rov_mpc)
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR} )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -104,14 +104,14 @@ target_link_libraries(code_gen_rov  ${ACADO_ENV_SHARED_LIBRARIES} mpc_solver)
 ament_target_dependencies(code_gen_rov  )
 set_target_properties(code_gen_rov PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
 
-add_executable(mpc_acado_node src/mpc_acado_node.cpp)
-target_link_libraries(mpc_acado_node mpc_solver ${ACADO_ENV_SHARED_LIBRARIES} yaml-cpp)
-ament_target_dependencies(mpc_acado_node rclcpp std_msgs geometry_msgs nav_msgs  )
+add_executable(rov_mpc_node src/rov_mpc_node.cpp)
+target_link_libraries(rov_mpc_node mpc_solver ${ACADO_ENV_SHARED_LIBRARIES} yaml-cpp)
+ament_target_dependencies(rov_mpc_node rclcpp std_msgs geometry_msgs nav_msgs  )
 
 install(TARGETS
   # getting_started
   code_gen_rov
-  mpc_acado_node
+  rov_mpc_node
 	DESTINATION lib/${PROJECT_NAME}
 )
 

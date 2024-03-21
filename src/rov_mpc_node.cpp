@@ -33,10 +33,16 @@ public:
     gp_dist_subscriber_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
             "/gp_pred_mu", qos, std::bind(&ModelPredictiveControl::gp_dist_cb, this, std::placeholders::_1));
 
+    auto timer_callback = [this]() -> void {
 
-    publish_control();
+      publish_control();
             
+    
     };
+    timer_ = this->create_wall_timer(2ms, timer_callback);
+  }
+            
+    
   
 
 
@@ -51,6 +57,7 @@ private:
   // Initiliaze subscribers
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber_;
   rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr gp_dist_subscriber_;
+  rclcpp::TimerBase::SharedPtr timer_;
 
 
   // Initiliaze publishers
@@ -81,7 +88,7 @@ void ModelPredictiveControl::odom_cb(const nav_msgs::msg::Odometry::SharedPtr ms
 
     tf2::Matrix3x3(q).getRPY(Phi, Theta, Psi);
 
-
+   /*
   state_feedback = { msg->pose.pose.position.x, 
                       msg->pose.pose.position.y,
                       -msg->pose.pose.position.z,
@@ -95,7 +102,7 @@ void ModelPredictiveControl::odom_cb(const nav_msgs::msg::Odometry::SharedPtr ms
                           msg->twist.twist.angular.y,
                           msg->twist.twist.angular.z
                             };
-
+*/
 }
 
 
@@ -115,7 +122,8 @@ void ModelPredictiveControl::publish_control()
 
    
   ModelPredictiveControl::control_wrench_publisher_->publish(msg);
-
+  cout << "force x" << msg.force.x  << std::endl;
+  cout << "force y" << msg.force.y  << std::endl;
 
 
 }
@@ -140,8 +148,8 @@ int main(int argc, char *argv[])
                       0.0     // r
                     };
 
-  reference = { 0.0,     // px
-                     0.0,     // px
+  reference = {       0.0,     // px
+                      0.0,     // px
                       0.0,     // px
                       0.0,    // phi
                       0.0,    // theta
@@ -156,9 +164,7 @@ int main(int argc, char *argv[])
 
 
 
-  gp_dist = {0.0,
-             0.0,
-            0.0};
+ 
 
 
   nmpc_struct.U_ref.resize(NMPC_NU);
@@ -204,7 +210,14 @@ int main(int argc, char *argv[])
 
   // initialize GP estimation
   //online_data.distFx = 0.0;
-  
+
+   dist_Fx.data_zeros.resize(NMPC_N + 1, 0.0);
+    online_data.distFx = dist_Fx.data_zeros;
+    online_data.distFy = dist_Fx.data_zeros;
+    online_data.distFz = dist_Fx.data_zeros;
+    online_data.distMx = dist_Fx.data_zeros;
+    online_data.distMy = dist_Fx.data_zeros;
+    online_data.distMz = dist_Fx.data_zeros;
 
 
 
@@ -246,9 +259,11 @@ int main(int argc, char *argv[])
   if (!nmpc->return_control_init_value())
       {  
 
+        
+          
           nmpc->nmpc_init(pos_ref, nmpc->nmpc_struct);
 
-
+       
           nmpc_struct.verbose = 1;
 
           if (nmpc_struct.verbose && nmpc->return_control_init_value())
@@ -266,10 +281,43 @@ int main(int argc, char *argv[])
    
      
     while (rclcpp::ok()){ 
-      online_data.distFx = {gp_dist.at(0)};
-    online_data.distFy = {gp_dist.at(1)};
-     online_data.distFz = {gp_dist.at(2)};
+      //online_data.distFx = {gp_dist.at(0)};
+    //online_data.distFy = {gp_dist.at(1)};
+     //online_data.distFz = {gp_dist.at(2)};
+    online_data.distFx = dist_Fx.data_zeros;
+    online_data.distFy = dist_Fx.data_zeros;
+    online_data.distFz = dist_Fx.data_zeros;
+    online_data.distMx = dist_Fx.data_zeros;
+    online_data.distMy = dist_Fx.data_zeros;
+    online_data.distMz = dist_Fx.data_zeros;
 
+  state_feedback = { 0.0,     // px
+                     0.0,     // px
+                      0.0,     // px
+                      0.0,    // phi
+                      0.0,    // theta
+                      0.0,    // psi
+                      0.0,    // u
+                      0.0,    // v
+                      0.0,    // w
+                      0.0,    // p
+                      0.0,    // q
+                      0.0     // r
+                    };
+
+  reference = {       2.0,     // px
+                      0.0,     // px
+                      0.0,     // px
+                      0.0,    // phi
+                      0.0,    // theta
+                      0.0,    // psi
+                      0.0,    // u
+                      0.0,    // v
+                      0.0,    // w
+                      0.0,    // p
+                      0.0,    // q
+                      0.0     // r
+                    };
             
          nmpc->nmpc_core(nmpc_struct,
                       nmpc->nmpc_struct,

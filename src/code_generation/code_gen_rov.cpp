@@ -81,7 +81,7 @@ const double lz_8 = 0.01;
 int main( )
 {
 	USING_NAMESPACE_ACADO
-	string path ="/home/hakim/home/ros2_ws/src/nmpc_rov";
+	string path ="/home/hakim/home/ros2_ws/src/rov_nmpc";
 	// Variables:
    ///home/hakim/Desktop/Phd/ros2_ws/src/mpc_acado/externals/ACADOtoolkit/acado
 
@@ -180,7 +180,7 @@ int main( )
 
     // Reference functions and weighting matrices:
     Function h, hN;
-    h << p_x << p_y << p_z << u << v << w << phi << theta << psi << r << X << Y << Z << M_x << M_y << M_z;
+    h  << p_x << p_y << p_z << u << v << w << phi << theta << psi << r << X << Y << Z << M_x << M_y << M_z;
     hN << p_x << p_y << p_z << u << v << w << phi << theta << psi << r;
 
     BMatrix W = eye<bool>(h.getDim());
@@ -191,7 +191,7 @@ int main( )
     //
 
     // Prediction Horizon = N * Ts
-    double N = 50;     // Number of prediction steps  
+    double N = 100;     // Number of prediction steps  
     double Ts = 0.01;  // time step 
     OCP ocp(0.0, N * Ts, N);
 
